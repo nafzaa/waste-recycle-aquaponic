@@ -6,7 +6,7 @@
 #include <TimeLib.h>
 #include <WidgetRTC.h>
 
-int relay = 4;
+int relay = 4; //D2 //gpio4
 #include <Servo.h>
 
 String timer1;
@@ -16,8 +16,8 @@ String timer4;
 String timer5;
 
 String currentTime;
-int minit;
-int minitawal;
+String minit;
+String minitawal;
 
 String noti;
 
@@ -27,6 +27,14 @@ int state = 0;
 
 int statenoti = 0;
 
+int Hour;
+int Minute;
+int Minuteoff;
+
+String Hourstring;
+String Minutestring;
+String Minutestringoff;
+
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
@@ -34,8 +42,8 @@ char auth[] = "AxHYAMM_5R0Z61kw8_DBxZG8V-kpnD7y";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "nafza94";
-char pass[] = "nafza9494";                           
+char ssid[] = "aresh";
+char pass[] = "20051999";                           
 
 BlynkTimer timer;
 
@@ -46,9 +54,29 @@ void clockDisplay()
 {
   // You can call hour(), minute(), ... at any time
   // Please see Time library examples for details
+  Hour = hour();
+  Minute = minute();
+  Minuteoff = minute() + 1;
 
-  currentTime = String(hour()) + ":" + minute();
-  minitawal = minute();
+  if (Hour <= 9){
+    Hourstring = "0" + String(Hour);
+    }
+  else {
+    Hourstring = String(Hour);
+    }
+
+  if (Minute <= 9){
+    Minutestring = "0" + String(Minute);
+    Minutestringoff = "0" + String(Minuteoff);
+    }
+
+  else {
+    Minutestring = String(Minute);
+    Minutestringoff = String(Minuteoff);
+    }
+
+  currentTime = Hourstring + ":" + Minutestring;
+  minitawal = Minutestring;
   
   
   Serial.print("Current time: ");
@@ -59,7 +87,7 @@ void clockDisplay()
   if (currentTime == timer4 && state == 0){
     digitalWrite(relay, LOW);
     Serial.println ("on");
-    minit = minute()+ 1;
+    minit = Minutestringoff;
     state = 1;
     statenoti = 1;
     noti = "light on";
@@ -72,7 +100,7 @@ void clockDisplay()
   if (currentTime == timer5 && state == 0){
     digitalWrite(relay, HIGH);
     Serial.println ("off");
-    minit = minute()+ 1;
+    minit = Minutestringoff;
     state = 1;
     statenoti = 2;
     noti = "light off";
@@ -83,12 +111,12 @@ void clockDisplay()
     }
 
   if (currentTime == timer1 && state == 0){
-    servo.write(180);
+    servo.write(90);
 
-    delay(5000);
+    delay(5000); //5 sec
 
     servo.write(0);
-    minit = minute()+ 1;
+    minit = Minutestringoff;
     Serial.println (minit);
     state = 1;
     statenoti = 3;
@@ -101,12 +129,12 @@ void clockDisplay()
 }
 
 if (currentTime == timer2 && state == 0){
-    servo.write(180);
+    servo.write(90);
 
-    delay(5000);
+    delay(5000); //5 sec
 
     servo.write(0);
-    minit = minute()+ 1;
+    minit = Minutestringoff;
     Serial.println (minit);
     state = 1;
     statenoti = 3;
@@ -119,12 +147,12 @@ if (currentTime == timer2 && state == 0){
 }
 
 if (currentTime == timer3 && state == 0){
-    servo.write(180);
+    servo.write(90);
 
-    delay(5000);
+    delay(5000); //5 sec
 
     servo.write(0);
-    minit = minute()+ 1;
+    minit = Minutestringoff;
     Serial.println (minit);
     state = 1;
     statenoti = 3;
